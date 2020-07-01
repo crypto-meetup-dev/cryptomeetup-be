@@ -1,0 +1,13 @@
+{
+  "name": "cryptomeetup-be",
+  "version": "1.0.0",
+  "description": "https://github.com/crypto-meetup-dev/cryptomeetup-be",
+  "main": "app.js",
+  "repository": "https://github.com/crypto-meetup-dev/cryptomeetup-be.git",
+  "author": "Ayaka Neko",
+  "license": "GPL 3.0",
+  "dependencies": {
+    "koa": "^2.13.0",
+    "koa-router": "^9.1.0"
+  }
+}
