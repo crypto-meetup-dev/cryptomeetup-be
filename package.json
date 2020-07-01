@@ -7,7 +7,10 @@
   "author": "Ayaka Neko",
   "license": "GPL 3.0",
   "dependencies": {
+    "gm": "^1.23.1",
     "koa": "^2.13.0",
-    "koa-router": "^9.1.0"
+    "koa-router": "^9.1.0",
+    "koa-static": "^5.0.0",
+    "nedb": "^1.8.0"
   }
 }
