@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="cryptomeetup">
+    <meta name="description" content="Backend and Supporting Platform of Cryptomeetup">
+    <link rel="icon" type="image/png" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>Cryptomeetup API</title>
+</head>
+
+<body>
+    <section class="intro">
+        <div class="intro-text" id="welcome">Welcome</div>
+        <div class="intro-text" id="name">Cryptomeetup API</div>
+        <button class="intro-btn" id="doc-btn" type="button"><a href="https://github.com/crypto-meetup-dev/cryptomeetup-be">Documentation</a></button>
+    </section>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const introText = document.getElementsByClassName("intro-text")
+        const introBtn = document.getElementsByClassName("intro-btn")
+
+        setTimeout(() => {
+            introText[0].classList.add('start')
+            introText[1].classList.add('start')
+            introBtn[0].classList.add("start")
+        }, 800)
+    })
+
+</script>
+
+</html>
