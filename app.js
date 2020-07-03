@@ -21,8 +21,21 @@ app.use(async (ctx, next) => {
     Log.info(`${ctx.request.ips} ${ctx.method} ${ctx.url} - ${rt}`);
 });
 
-// x-response-time
+let home = new KoaRouter()
+home.get('/', async (ctx, next) => {
+    ctx.type = 'html';
+    ctx.body = fs.readFileSync(path.resolve("./public/index.html"))
+    await next()
+})
 
+let cmu = new KoaRouter()
+
+cmu.get('/', async (ctx, next) => {
+    ctx.body = "pong!"
+    await next()
+})
+
+// x-response-time
 app.use(async (ctx, next) => {
     const start = Date.now();
     await next();
@@ -30,8 +43,10 @@ app.use(async (ctx, next) => {
     ctx.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(KoaStatic('./public'))
-app.use(KoaStatic('./public/img'))
+let router = new KoaRouter()
+router.use('/', home.routes(), home.allowedMethods())
+router.use('/ping', cmu.routes(), cmu.allowedMethods())
+app.use(router.routes()).use(router.allowedMethods())
 
 // Error Handling
 app.on('error', (err, ctx) => {
