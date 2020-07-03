@@ -7,7 +7,7 @@ const KoaStatic = require('koa-static')
 const { userAgent } = require('koa-useragent')
 
 // Local Packages
-const Log = require('./util/log')
+const Log = require('./src/util/log')
 
 const config = require('./config.json')
 
@@ -31,6 +31,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(KoaStatic('./public'))
+app.use(KoaStatic('./public/img'))
 
 // Error Handling
 app.on('error', (err, ctx) => {
