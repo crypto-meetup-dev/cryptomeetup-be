@@ -3,22 +3,22 @@
     margin: 0;
     padding: 0;
 }
-
+body {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(0deg, #061E33 0%, #082b4a 100%);
+    text-align: center;
+    justify-content: center;
+}
 a {
     text-decoration: none;
     color: #FFD83F;
 }
 
 .intro {
-    width: 100vw;
-    height: 100vh;
-    background-color: #0e0e0e;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-box-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
+    width: 100%;
+    top: 40%;
+    position: absolute;
     overflow: hidden;
     font-size: 1rem;
 }
@@ -30,7 +30,7 @@ a {
 
 #name {
     font-weight: 500;
-    font-size: 5em;
+    font-size: 4em;
     text-transform: uppercase;
 }
 
@@ -39,7 +39,6 @@ a {
     font-family: 'Poppins', sans-serif;
     opacity: 0;
     letter-spacing: 1em;
-    margin-right: -1em;
     -webkit-transition: all 1s ease;
     transition: all 1s ease;
 }
