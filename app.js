@@ -7,7 +7,7 @@ const KoaStatic = require('koa-static')
 const { userAgent } = require('koa-useragent')
 
 // Local Packages
-const Log = require('./util/log')
+const Log = require('./src/util/log')
 
 const config = require('./config.json')
 
@@ -21,8 +21,14 @@ app.use(async (ctx, next) => {
     Log.info(`${ctx.request.ips} ${ctx.method} ${ctx.url} - ${rt}`);
 });
 
-// x-response-time
+let cmu = new KoaRouter()
 
+cmu.get('/ping', async (ctx, next) => {
+    ctx.body = "pong!"
+    await next()
+})
+
+// x-response-time
 app.use(async (ctx, next) => {
     const start = Date.now();
     await next();
@@ -30,7 +36,9 @@ app.use(async (ctx, next) => {
     ctx.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(KoaStatic('./public'))
+app.use(cmu.routes()).use(cmu.allowedMethods())
+
+app.use(KoaStatic("./public"))
 
 // Error Handling
 app.on('error', (err, ctx) => {
