@@ -21,16 +21,9 @@ app.use(async (ctx, next) => {
     Log.info(`${ctx.request.ips} ${ctx.method} ${ctx.url} - ${rt}`);
 });
 
-let home = new KoaRouter()
-home.get('/', async (ctx, next) => {
-    ctx.type = 'html';
-    ctx.body = fs.readFileSync(path.resolve("./public/index.html"))
-    await next()
-})
-
 let cmu = new KoaRouter()
 
-cmu.get('/', async (ctx, next) => {
+cmu.get('/ping', async (ctx, next) => {
     ctx.body = "pong!"
     await next()
 })
@@ -43,10 +36,9 @@ app.use(async (ctx, next) => {
     ctx.set('X-Response-Time', `${ms}ms`);
 });
 
-let router = new KoaRouter()
-router.use('/', home.routes(), home.allowedMethods())
-router.use('/ping', cmu.routes(), cmu.allowedMethods())
-app.use(router.routes()).use(router.allowedMethods())
+app.use(cmu.routes()).use(cmu.allowedMethods())
+
+app.use(KoaStatic("./public"))
 
 // Error Handling
 app.on('error', (err, ctx) => {
