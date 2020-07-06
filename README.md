@@ -1,6 +1,6 @@
 # Cryptomeetup Backend
 
-<center style="font-size: 1.5rem; font-weight:600;">This is still a on going working project</centet>
+<p align="center" style="font-size: 1.5rem; font-weight:600;">This is still a on going working project</p>
 
 ## Deploy
 
@@ -104,4 +104,4 @@ For local development, you don't need any other configuration, edit the environm
 
 ## API DOCUMENTATION
 
-[ ] TODO
+[x] TODO
