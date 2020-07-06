@@ -14,5 +14,8 @@
     "koa-useragent": "^4.0.0",
     "log4js": "^6.3.0",
     "nedb": "^1.8.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }
