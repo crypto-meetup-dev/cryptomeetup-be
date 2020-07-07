@@ -19,6 +19,7 @@ const update = {
             return
         }
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        UserProfile = UserProfile.pop()
         if (query.email !== UserProfile.email) {
             Store.user.update({ id: query.id }, { $set: { email: query.email } }, {})
             ctx.body = { message: "success" }
@@ -44,6 +45,7 @@ const update = {
             return
         }
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        UserProfile = UserProfile.pop()
         if (query.avatar !== UserProfile.avatar) {
             Store.user.update({ id: query.id }, { $set: { avatar: query.avatar }}, {})
             ctx.body = { message: "success" }
@@ -69,15 +71,20 @@ const update = {
             return
         }
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
-        console.log(UserProfile)
-        if (query.nickname !== UserProfile.nickname) {
+        UserProfile = UserProfile.pop()
+        if (query.nickname == UserProfile.nickname) {
+            ctx.body = { message: "No need to modify" }
+        }
+        else {
             Store.user.update({ id: query.id }, { $set: { nickname: query.nickname } }, {})
             ctx.body = { message: "success" }
         }
-        else {
-            ctx.body = { message: "No need to modify" }
-        }
         await next()
+    },
+    async position(ctx, next) {
+        let query = ctx.request.query
+        query = JSON.parse(JSON.stringify(query))
+        
     }
 }
 
