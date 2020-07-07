@@ -1,5 +1,6 @@
 // Dependencies
 const DataStore = require('nedb')
+const { Logger } = require('log4js')
 
 let freshDb = new DataStore()
 let mainDb = new DataStore({filename: './data/cryptomeetup.db', autoload: true})
@@ -194,6 +195,17 @@ let main = {
 }
 
 let user = {
+    isFirst(id) {
+        return new Promise((resolve, reject) => {
+            userDb.find({ key: "UserProfile", id: id }, (err, docs) => {
+                let result
+                if (err) result = true
+                if (docs.length === 0) result = true
+                else result = false
+                resolve(result)
+            })
+        })
+    },
     /**
      * Inserting documents     
      * The native types are String, Number, Boolean, Date and null.
