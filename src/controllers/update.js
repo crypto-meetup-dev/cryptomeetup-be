@@ -18,9 +18,9 @@ const update = {
             await next()
             return
         }
-        let UserProfile = await Store.user.find({ key: "UserProfile" })
-        if (!query.email === UserProfile.email) {
-            Store.user.update({ id: query.id }, { email: query.email })
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        if (query.email !== UserProfile.email) {
+            Store.user.update({ id: query.id }, { $set: { email: query.email } }, {})
             ctx.body = { message: "success" }
         }
         else {
@@ -43,9 +43,9 @@ const update = {
             await next()
             return
         }
-        let UserProfile = await Store.user.find({ key: "UserProfile" })
-        if (!query.avatar === UserProfile.avatar) {
-            Store.user.update({ id: query.id }, { avatar: query.avatar })
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        if (query.avatar !== UserProfile.avatar) {
+            Store.user.update({ id: query.id }, { $set: { avatar: query.avatar }}, {})
             ctx.body = { message: "success" }
         }
         else {
@@ -68,9 +68,10 @@ const update = {
             await next()
             return
         }
-        let UserProfile = await Store.user.find({ key: "UserProfile" })
-        if (!query.nickname === UserProfile.nickname) {
-            Store.user.update({ id: query.id }, { nickname: query.nickname })
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        console.log(UserProfile)
+        if (query.nickname !== UserProfile.nickname) {
+            Store.user.update({ id: query.id }, { $set: { nickname: query.nickname } }, {})
             ctx.body = { message: "success" }
         }
         else {
