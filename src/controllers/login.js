@@ -1,7 +1,7 @@
 // Local Package
 let Log = require('../util/log')
 let Store = require('../util/store')
-const { avatar } = require('./update')
+let getCircleAvatar = require('../util/getCirccleAvatar')
 
 const login = async (ctx, next) => {
     let query = ctx.request.query
@@ -21,7 +21,7 @@ const login = async (ctx, next) => {
     }
     if (query.nickname === undefined) {
         ctx.status = 406
-        ctx.body = { message: "Invalid Request, Missing value on required field `nickname`"}
+        ctx.body = { message: "Invalid Request, Missing value on required field `nickname`" }
         await next()
         return
     }
@@ -39,9 +39,10 @@ const login = async (ctx, next) => {
         await Store.user.insert({ key: "UserProfile", id: query.id, email: query.email, nickname: query.nickname, avatar: query.avatar })
         Log.debug("New user " + query.nickname + " logged in, user data written into database.")
         ctx.body = { message: "Welcome! New user " + query.nickname }
+        getCircleAvatar(query.id, query.avatar)
     }
     else {
-        ctx.body = { message: "Welcome back! " + query.nickname}
+        ctx.body = { message: "Welcome back! " + query.nickname }
         Log.debug('Existing user ' + query.nickname + ' logged in.')
     }
     await next()
