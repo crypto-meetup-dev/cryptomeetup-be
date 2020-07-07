@@ -1,10 +1,16 @@
 // Dependencies
 const KoaRouter = require('koa-router')
 
+// Local Dependencies
+const login = require('../controllers/login')
+const { avatar, nickname, email } = require('../controllers/update')
+
 let user = new KoaRouter()
 
-user.get("/info", async (ctx, next) => {
-    ctx.body = {data: "userinfo"}
-})
+user.get("/login", login)
+user.get("/update/email", email)
+user.get("/update/avatar", avatar)
+user.get("/update/nickname", nickname)
+
 
 module.exports = user
