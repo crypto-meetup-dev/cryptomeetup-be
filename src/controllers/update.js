@@ -72,7 +72,7 @@ const update = {
         }
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
         UserProfile = UserProfile.pop()
-        if (query.nickname == UserProfile.nickname) {
+        if (query.nickname === UserProfile.nickname) {
             ctx.body = { message: "No need to modify" }
         }
         else {
@@ -84,7 +84,28 @@ const update = {
     async position(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
-        
+        if (query.id === undefined) {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `id`"
+            await next()
+            return
+        }
+        if (query.position === undefined) {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `position`"
+            await next()
+            return
+        }
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        UserProfile = UserProfile.pop()
+        if (query.position === UserProfile.position) {
+            ctx.body = { message: "No need to modify" }
+        }
+        else {
+            Store.user.update({ id: query.id }, { $set: { position: query.position } }, {})
+            ctx.body = { message: "success" }
+        }
+        await next()
     }
 }
 
