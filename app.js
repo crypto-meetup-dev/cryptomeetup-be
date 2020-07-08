@@ -12,17 +12,29 @@ const Store = require('./src/store/store')
 const routers = require('./src/route/router')
 const Global = require('./src/util/global')
 const config = require('./config.json')
+const { resolve } = require('path')
 
 const app = new Koa()
 app.proxy = true
 app.use(userAgent)
 
 // Init
+let initNotifyArray = () => {
+    return new Promise((resolve, reject) => {
+        Store.mainDb.find({ key: "Notify" }, (err, doc) => {
+            if (err) Log.fatal(err)
+            if (doc.length === 0) {
+                Log.info("First run, init database for notifications")
+                Store.main.insert({ key: "Notify", notifications: new Array })
+            }
+        })
+    })
+}
 // init users array
 let initUserArray = () => {
     return new Promise((resolve, reject) => {
         Store.userDb.find({ key: "UserList" }, (err, doc) => {
-            if (err) console.log(err)
+            if (err) Log.fatal(err)
             if (doc.length === 0) {
                 Log.info("First run, init database for users")
                 Store.user.insert({ key: "UserList", users: new Array() })
@@ -32,6 +44,7 @@ let initUserArray = () => {
     })
 }
 initUserArray()
+initNotifyArray()
 Global.Add('config', config)
 
 // to Log
