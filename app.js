@@ -41,6 +41,21 @@ app.use(async (ctx, next) => {
     Log.info(`${ctx.request.ips} ${ctx.method} ${ctx.url} - ${rt}`);
 });
 
+app.use(async (ctx, next) => {
+    ctx.set("Access-Control-Allow-Origin", ctx.headers.origin);
+    ctx.set("Access-Control-Allow-Credentials", true);
+    ctx.set("Access-Control-Request-Method", "PUT,POST,GET,DELETE,OPTIONS");
+    ctx.set(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, cc"
+    );
+    if (ctx.method === "OPTIONS") {
+        ctx.status = 204;
+        return;
+    }
+    await next();
+});
+
 let test = new KoaRouter()
 test.get('/ping', async (ctx, next) => {
     ctx.body = "pong!"
