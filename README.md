@@ -1,6 +1,26 @@
 # Cryptomeetup Backend
 
-<p align="center" style="font-size: 1.5rem; font-weight:600;">This is still a on going working project</p>
+<p align="center" style="font-size: 1.5rem; font-weight:700;">This is still a on going working project</p>
+
+<p align="center">Table of Content</p>
+
+- [Deploy](#Deploy)
+  - [clone](#clone)
+  - [node installation](#node-installation)
+  - [lift up](#lift-up)
+  - [reverse proxy](#reverse-proxy)
+  - [try out](#try-out)
+- [Development](#Development)
+- [API Documentation](#API-DOCUMENTATION)
+  - [GET /user/login](#get-userlogin)
+  - [GET /user/avatar](#get-useravatar)
+  - [GET /user/position](#get-userposition)
+  - [GET /user/update/email](#get-userupdateemail)
+  - [GET /user/update/avatar](#get-userupdateavatar)
+  - [GET /user/update/nickname](#get-userupdatenickname)
+  - [GET /user/update/position](#get-userupateposition)
+
+
 
 ## Deploy
 
@@ -104,4 +124,156 @@ For local development, you don't need any other configuration, edit the environm
 
 ## API DOCUMENTATION
 
-[x] TODO
+### GET /user/login
+
+| Fields   | Type    | Description                                          |
+| -------- | ------- | ---------------------------------------------------- |
+| id       | Integer | id of this user in Matataki.io                       |
+| email    | String  | email of this user in Matataki.io                    |
+| nickname | String  | nickname of this user in Matataki.io                 |
+| Avatar   | String  | Partial avatar imgae url of this user in Matataki.io |
+
+#### Response
+
+| Fields  | Type   | Description                                     |
+| ------- | ------ | ----------------------------------------------- |
+| message | String | Welcome message according to the users nickname |
+
+Example:
+
+```
+https://api.instance.com/user/login?id=1&email=master@instance.com&nickname=john&avatar=avatar_url
+```
+
+Example response:
+
+```
+{ message: Welcome new user john! }
+```
+
+### GET /user/avatar
+
+| Fields | Type    | Description                             |
+| ------ | ------- | --------------------------------------- |
+| id     | Integer | id of the requested user for the avatar |
+
+#### Response
+
+| Fields    | Type      | Description                                   |
+| --------- | --------- | --------------------------------------------- |
+| Image/png | Image/png | The circle image avatar of the requested user |
+
+Example:
+
+```
+https://api.instance.com/user/avatar?id=1
+```
+
+Example response:
+
+```
+BASE64 imgae/png
+```
+
+### GET /user/update/email
+
+| Fields | Type    | Description                                   |
+| ------ | ------- | --------------------------------------------- |
+| id     | Integer | id of the requested user for the email change |
+| email  | String  | email address that needs to be modified       |
+
+#### Response
+
+| Fields  | Type   | Description                                                  |
+| ------- | ------ | ------------------------------------------------------------ |
+| Message | String | The message saying weither the update is success or not modified |
+
+Example:
+
+```
+https://api.instance.com/user/update/email?id=1@email=root@instance.com
+```
+
+Example response:
+
+```
+{ "message": "success" }
+```
+
+### GET /user/update/avatar
+
+| Fields     | Type    | Description                                    |
+| ---------- | ------- | ---------------------------------------------- |
+| id         | Integer | id of the requested user for the avatar change |
+| avatar url | String  | Partial avatar url of the requested user       |
+
+#### Response
+
+| Fields  | Type   | Description                                                  |
+| ------- | ------ | ------------------------------------------------------------ |
+| Message | String | The message saying weither the update is success or not modified |
+
+Example:
+
+```
+https://api.instance.com/user/update/avatar?id=1&avatar=avatar_url
+```
+
+Example response:
+
+```
+{ "message": "success" }
+```
+
+### GET /user/update/nickname
+
+| Fields   | Type    | Description                                         |
+| -------- | ------- | --------------------------------------------------- |
+| id       | Integer | id of the requested user for the nickname change    |
+| nickname | String  | nickname that is going to change for requested user |
+
+#### Response
+
+| Fields  | Type   | Description                                                  |
+| ------- | ------ | ------------------------------------------------------------ |
+| Message | String | The message saying weither the update is success or not modified |
+
+Example:
+
+```
+https://api.instance.com/user/update/nickname?id=1&nickname=steve
+```
+
+Example response:
+
+```
+{ "message": "success" }
+```
+
+### GET /user/update/position
+
+| Fields | Type    | Description                                      |
+| ------ | ------- | ------------------------------------------------ |
+| id     | Integer | id of the requested user for the position change |
+| lng    | Float   | Longtitude for the position to update            |
+| lat    | Float   | Latitude for the position to update              |
+
+#### Response
+
+| Fields  | Type   | Description                                                  |
+| ------- | ------ | ------------------------------------------------------------ |
+| Message | String | The message saying weither the update is success or not modified |
+
+Example:
+
+```
+https://api.instance.com/user/update/position?id=1&lng=123.22&lat=32.3331
+```
+
+Example response:
+
+```
+{ "message": "success" }
+```
+
+### 

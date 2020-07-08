@@ -6,6 +6,7 @@ const update = {
     async email(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
+
         if (query.id === undefined) {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
@@ -18,8 +19,10 @@ const update = {
             await next()
             return
         }
+
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
         UserProfile = UserProfile.pop()
+        
         if (query.email !== UserProfile.email) {
             Store.user.update({ id: query.id }, { $set: { email: query.email } }, {})
             ctx.body = { message: "success" }
@@ -32,6 +35,7 @@ const update = {
     async avatar(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
+
         if (query.id === undefined) {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
@@ -44,8 +48,10 @@ const update = {
             await next()
             return
         }
+
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
         UserProfile = UserProfile.pop()
+
         if (query.avatar !== UserProfile.avatar) {
             Store.user.update({ id: query.id }, { $set: { avatar: query.avatar }}, {})
             ctx.body = { message: "success" }
@@ -58,6 +64,7 @@ const update = {
     async nickname(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
+
         if (query.id === undefined) {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
@@ -70,9 +77,11 @@ const update = {
             await next()
             return
         }
+
         let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
         UserProfile = UserProfile.pop()
-        if (query.nickname == UserProfile.nickname) {
+
+        if (query.nickname === UserProfile.nickname) {
             ctx.body = { message: "No need to modify" }
         }
         else {
@@ -84,7 +93,38 @@ const update = {
     async position(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
-        
+
+        if (query.id === undefined) {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `id`"
+            await next()
+            return
+        }
+        if (query.lng === undefined || query.lat === undefined) {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `position`"
+            await next()
+            return
+        }
+
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        UserProfile = UserProfile.pop()
+
+        if (query.lng === UserProfile.lng) {
+            ctx.body = { message: "No need to modify" }
+        }
+        else {
+            Store.user.update({ id: query.id }, { $set: { lng: query.lng } }, {})
+            ctx.body = { message: "success" }
+        }
+        if (query.lat === UserProfile.lat) {
+            ctx.body = { message: "No need to modify" }
+        }
+        else {
+            Store.user.update({ id: query.id }, { $set: { lat: query.lat } }, {})
+            ctx.body = { message: "success" }
+        }
+        await next()
     }
 }
 
