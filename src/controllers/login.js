@@ -1,6 +1,6 @@
 // Local Package
 let Log = require('../util/log')
-let Store = require('../util/store')
+let Store = require('../store/store')
 let getCircleAvatar = require('../util/getCirccleAvatar')
 
 const login = async (ctx, next) => {

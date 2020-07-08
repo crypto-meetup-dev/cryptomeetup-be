@@ -8,7 +8,7 @@ const { userAgent } = require('koa-useragent')
 
 // Local Packages
 const Log = require('./src/util/log')
-const Store = require('./src/util/store')
+const Store = require('./src/store/store')
 const routers = require('./src/route/router')
 const Global = require('./src/util/global')
 const config = require('./config.json')
