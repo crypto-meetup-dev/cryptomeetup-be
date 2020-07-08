@@ -1,6 +1,6 @@
 // Local Package
 let Log = require('../util/log')
-let Store = require('../util/store')
+let Store = require('../store/store')
 
 const update = {
     async email(ctx, next) {
