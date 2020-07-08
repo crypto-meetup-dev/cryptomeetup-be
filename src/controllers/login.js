@@ -1,6 +1,6 @@
 // Local Package
 let Log = require('../util/log')
-let Store = require('../util/store')
+let Store = require('../store/store')
 let getCircleAvatar = require('../util/getCirccleAvatar')
 
 const login = async (ctx, next) => {
@@ -37,6 +37,7 @@ const login = async (ctx, next) => {
     if (isFirst) {
         await Store.user.update({ key: "UserList" }, { $addToSet: { users: query.id } }, {})
         await Store.user.insert({ key: "UserProfile", id: query.id, email: query.email, nickname: query.nickname, avatar: query.avatar })
+        await Store.user.insert({ key: "NotifyProfile", id: query.id, notifications: [] })
         Log.debug("New user " + query.nickname + " logged in, user data written into database.")
         ctx.body = { message: "Welcome! New user " + query.nickname }
         getCircleAvatar(query.id, query.avatar)
