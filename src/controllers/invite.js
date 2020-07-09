@@ -19,22 +19,24 @@ let invite = async (ctx, next) => {
         return
     }
 
-    let user = await Store.user.findOne({ key: "UserProfile", id: query.id })
-    let res = await Store.user.findOne({ key: "NotifyProfile", id: query.id })
+    let src = await Store.user.findOne({ key: "UserProfile", id: query.id })
+    let user = await Store.user.findOne({ key: "UserProfile", email: query.email })
+    let res = await Store.user.findOne({ key: "NotifyProfile", id: user.id })
     let notifyId = res.notifications.length + 1
     let notifyObject = {
         notifyGlobalId: Hash.sha256(notifyId + "").substring(0,8),
         notifyId: notifyId,
-        userId: query.id,
-        title: user.nickname + "希望和你共享 TA 的地图信息",
-        body: user.nickname + "希望和你共享 TA 的地图信息（这并不会暴露你的地图信息），要接受吗？",
+        userId: user.id,
+        title: src.nickname,
+        body: src.nickname + "希望和你共享 TA 的地图信息（这并不会暴露你的地图信息），要接受吗？",
         accepted: false
     }
-    
+
     await Store.main.insert({ key: "Notify" }, { $push: notifyObject})
-    await Store.user.update({ key: "NotifyProfile", id: query.id }, { $push: { notifications: notifyObject } }, {})
+    await Store.user.update({ key: "NotifyProfile", id: user.id }, { $push: { notifications: notifyObject } }, {})
 
     ctx.body = notifyObject
+    await next()
 }
 
 let inviteUpdate = async (ctx, next) => {
