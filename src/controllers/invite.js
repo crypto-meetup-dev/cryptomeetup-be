@@ -1,12 +1,42 @@
 // Local Packages
 const Log = require('../util/log')
 const Store = require('../store/store')
+const Hash = require('../util/hash')
 
 // /invite endpoint
 let invite = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    ctx.body = query
+
+    if (query.id === undefined) {
+        ctx.body = { status: "failed", message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+    if (query.email === undefined) {
+        ctx.body = { status: "failed", message: "Invalid Request, Missing value on required field `email`" }
+        await next()
+        return
+    }
+
+    let src = await Store.user.findOne({ key: "UserProfile", id: query.id })
+    let user = await Store.user.findOne({ key: "UserProfile", email: query.email })
+    let res = await Store.user.findOne({ key: "NotifyProfile", id: user.id })
+    let notifyId = res.notifications.length + 1
+    let notifyObject = {
+        notifyGlobalId: Hash.sha256(notifyId + "").substring(0,8),
+        notifyId: notifyId,
+        userId: user.id,
+        title: src.nickname,
+        body: src.nickname + "希望和你共享 TA 的地图信息（这并不会暴露你的地图信息），要接受吗？",
+        accepted: false
+    }
+
+    await Store.main.insert({ key: "Notify" }, { $push: notifyObject})
+    await Store.user.update({ key: "NotifyProfile", id: user.id }, { $push: { notifications: notifyObject } }, {})
+
+    ctx.body = notifyObject
+    await next()
 }
 
 let inviteUpdate = async (ctx, next) => {
