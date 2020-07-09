@@ -40,7 +40,7 @@ const login = async (ctx, next) => {
         await Store.user.insert({ key: "NotifyProfile", id: query.id, notifications: [] })
         Log.debug("New user " + query.nickname + " logged in, user data written into database.")
         ctx.body = { message: "Welcome! New user " + query.nickname }
-        getCircleAvatar(query.id, query.avatar)
+        await getCircleAvatar(query.id, query.avatar)
     }
     else {
         ctx.body = { message: "Welcome back! " + query.nickname }
