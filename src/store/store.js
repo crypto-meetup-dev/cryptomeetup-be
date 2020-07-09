@@ -48,6 +48,22 @@ let fresh = {
         })
     },
     /**
+     * Find only on specific document
+     * @param {*} key 
+     */
+    findOne(key) {
+        return new Promise((resolve, reject) => {
+            freshDb.findOne(key, (err, doc) => {
+                if (err) {
+                    err.name = "Fresh Database Error"
+                    reject(err)
+                }
+                if (doc === null) resolve(false)
+                resolve(doc)
+            })
+        })
+    },
+    /**
      * Updating documents    
      * db.update(query, update, options, callback) will update all documents matching query according to the update rules
      * @param {*} query 
@@ -141,6 +157,22 @@ let main = {
             })
         })
     },
+    /**
+    * Find only on specific document
+    * @param {*} key 
+    */
+   findOne(key) {
+       return new Promise((resolve, reject) => {
+            mainDb.findOne(key, (err, doc) => {
+               if (err) {
+                   err.name = "Main Database Error"
+                   reject(err)
+               }
+               if (doc === null) resolve(false)
+               resolve(doc)
+           })
+       })
+   },
     /**
      * Updating documents     
      * db.update(query, update, options, callback) will update all documents matching query according to the update rules
@@ -243,6 +275,22 @@ let user = {
                 error.name = "User Database Error"
                 if (docs.length === 0) reject(error)
                 resolve(docs)
+            })
+        })
+    },
+    /**
+     * Find only on specific document
+     * @param {*} key 
+     */
+    findOne(key) {
+        return new Promise((resolve, reject) => {
+            userDb.findOne(key, (err, doc) => {
+                if (err) {
+                    err.name = "User Database Error"
+                    reject(err)
+                }
+                if (doc === null) resolve(false)
+                resolve(doc)
             })
         })
     },
