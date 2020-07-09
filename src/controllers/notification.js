@@ -7,20 +7,20 @@ let notifyUpdate = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
     console.log(query)
-    ctx.body = query
+    ctx.body = "1"
 }
 
 let notifyNew = async(ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    ctx.body = query
+    ctx.body = "2"
 }
 
 let notifyObject = async(ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    ctx.body = query
-    
+    ctx.body = "3"
+
 }
 
 let notifyPush = async (ctx, next) => {
@@ -34,8 +34,9 @@ let notifyPush = async (ctx, next) => {
     }
 
     let res = await Store.user.findOne({ key: "NotifyProfile", id: query.id })
-    ctx.type = "application/json"
     ctx.body = res.notifications
+
+    await next()
 }
 
 module.exports = {
