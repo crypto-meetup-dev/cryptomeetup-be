@@ -88,6 +88,7 @@ app.use(routers.routes()).use(routers.allowedMethods())
 
 // Serve static file
 app.use(KoaStatic("./public"))
+app.use(KoaStatic("./data"))
 
 // Error Handling
 app.on('error', (err, ctx) => {
