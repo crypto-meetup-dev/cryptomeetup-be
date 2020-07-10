@@ -95,5 +95,5 @@ app.on('error', (err, ctx) => {
     Log.fatal("Server Error: " + err + ctx)
 })
 app.listen(config.port, () => {
-    console.log("listening on http://127.0.0.1:" + config.port)
+    Log.info("listening on http://127.0.0.1:" + config.port)
 })
