@@ -24,7 +24,7 @@ const update = {
         UserProfile = UserProfile.pop()
         
         if (query.email !== UserProfile.email) {
-            Store.user.update({ id: query.id }, { $set: { email: query.email } }, {})
+            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { email: query.email } }, {})
             ctx.body = { message: "success" }
         }
         else {
@@ -53,7 +53,7 @@ const update = {
         UserProfile = UserProfile.pop()
 
         if (query.avatar !== UserProfile.avatar) {
-            Store.user.update({ id: query.id }, { $set: { avatar: query.avatar }}, {})
+            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { avatar: query.avatar }}, {})
             ctx.body = { message: "success" }
         }
         else {
@@ -85,7 +85,7 @@ const update = {
             ctx.body = { message: "No need to modify" }
         }
         else {
-            Store.user.update({ id: query.id }, { $set: { nickname: query.nickname } }, {})
+            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { nickname: query.nickname } }, {})
             ctx.body = { message: "success" }
         }
         await next()
@@ -114,14 +114,14 @@ const update = {
             ctx.body = { message: "No need to modify" }
         }
         else {
-            Store.user.update({ id: query.id }, { $set: { lng: query.lng } }, {})
+            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { lng: query.lng } }, {})
             ctx.body = { message: "success" }
         }
         if (query.lat === UserProfile.lat) {
             ctx.body = { message: "No need to modify" }
         }
         else {
-            Store.user.update({ id: query.id }, { $set: { lat: query.lat } }, {})
+            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { lat: query.lat } }, {})
             ctx.body = { message: "success" }
         }
         await next()

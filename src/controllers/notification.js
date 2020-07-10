@@ -6,7 +6,6 @@ const Store = require('../store/store')
 let notifyUpdate = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    console.log(query)
     ctx.body = "1"
 }
 
