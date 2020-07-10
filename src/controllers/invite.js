@@ -85,14 +85,12 @@ async function accept(query) {
     let res = await Store.user.findOne({ key: "NotifyProfile", id: query.id })
     let notifications = res.notifications.filter(e => e.notifyId !== parseInt(query.notifyId))
     await Store.user.update({ key: "NotifyProfile", id: query.id }, { $set: { notifications: notifications }}, {})
-    console.log(notifications)
 }
 
 async function deny(query) {
     let res = await Store.user.findOne({ key: "NotifyProfile", id: query.id })
     let notifications = res.notifications.filter(e => e.notifyId !== parseInt(query.notifyId))
     await Store.user.update({ key: "NotifyProfile", id: query.id }, { $set: { notifications: notifications }}, {})
-    console.log(notifications)
 }
 
 module.exports = {
