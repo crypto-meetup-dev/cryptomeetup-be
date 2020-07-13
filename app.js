@@ -92,7 +92,7 @@ app.use(KoaStatic("./data"))
 
 // Error Handling
 app.on('error', (err, ctx) => {
-    Log.fatal("Server Error: " + err + ctx)
+    Log.fatal("Server Error: " + err + JSON.stringify(ctx))
 })
 app.listen(config.port, () => {
     Log.info("listening on http://127.0.0.1:" + config.port)
