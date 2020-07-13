@@ -55,11 +55,11 @@ const update = {
 
         if (query.avatar !== UserProfile.avatar) {
             await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { avatar: query.avatar }}, {})
-            await getCircleAvatar(query.avatar)
+            await getCircleAvatar(query.id, query.avatar)
             ctx.body = { message: "success" }
         }
         else {
-            await getCircleAvatar(query.avatar)
+            await getCircleAvatar(query.id, query.avatar)
             ctx.body = { message: "No need to modify" }
         }
         await next()
