@@ -36,7 +36,7 @@ const login = async (ctx, next) => {
     let isFirst = await Store.user.isFirst(query.id)
     if (isFirst) {
         await Store.user.update({ key: "UserList" }, { $addToSet: { users: query.id } }, {})
-        await Store.user.insert({ key: "UserProfile", id: query.id, email: query.email, nickname: query.nickname, avatar: query.avatar, lng: 0, lat: 0 })
+        await Store.user.insert({ key: "UserProfile", id: query.id, email: query.email, nickname: query.nickname, avatar: query.avatar, status: false, lng: 0, lat: 0 })
         await Store.user.insert({ key: "NotifyProfile", id: query.id, notifications: [] })
         await Store.user.insert({ key: "FriendsProfile", id: query.id, users: [] })
         Log.debug("New user " + query.nickname + " logged in, user data written into database.")
