@@ -7,7 +7,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -36,7 +36,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -65,7 +65,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -94,7 +94,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -130,7 +130,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
