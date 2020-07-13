@@ -27,6 +27,7 @@ let getCircleAvatar = async (id, avatar) => {
 
     let avatarUrl = Global.Read('config').MTTKIMGCDN + avatar
     let extName = avatarUrl.replace(/(https?:\/\/)(.*\/)/gui, "").split(".")[1]
+    Log.debug(avatarUrl)
     axios({
         method: 'get',
         url: avatarUrl,

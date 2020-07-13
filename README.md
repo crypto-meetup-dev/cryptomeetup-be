@@ -12,6 +12,11 @@
   - [try out](#try-out)
 - [Development](#Development)
 - [API Documentation](#API-DOCUMENTATION)
+  - [GET /friends](#get-friends)
+  - [GET /friends/update](#get-friendsupdate)
+  - [GET /invite](#get-invite)
+  - [GET /invite/update](#get-inviteupdate)
+  - [GET /notification/push](#get-notificationpush)
   - [GET /user/login](#get-userlogin)
   - [GET /user/avatar](#get-useravatar)
   - [GET /user/position](#get-userposition)
@@ -123,6 +128,41 @@ Make sure you have your `data` and `cache` setup correctly.
 For local development, you don't need any other configuration, edit the environment variables in `config.json` and code on your IDE. 
 
 ## API DOCUMENTATION
+
+### GET /friends
+
+| Fields | Type    | Description                   |
+| ------ | ------- | ----------------------------- |
+| id     | Integer | id of the user in Matataki.io |
+
+### GET /friends/update
+
+| Fields   | Type    | Description              |
+| -------- | ------- | ------------------------ |
+| id       | Integer | id of the user to modify |
+| removeId | Integer | id of the user to remove |
+
+### GET /invite
+
+| Fields | Type    | Description                         |
+| ------ | ------- | ----------------------------------- |
+| id     | Integer | id of the user to send invite       |
+| email  | String  | email of the user to get the invite |
+
+### GET /invite/update
+
+| Fields     | Type    | Description                      |
+| ---------- | ------- | -------------------------------- |
+| id         | Integer | id of the user to update         |
+| result     | String  | 'accept' or 'deny' of the result |
+| notifyId   | Integer | id of the notifyObject for user  |
+| inviteUser | Integer | id of the user to be invited     |
+
+### GET /notification/push
+
+| Field | Type    | Description                |
+| ----- | ------- | -------------------------- |
+| id    | Integer | id of the user to get push |
 
 ### GET /user/login
 
