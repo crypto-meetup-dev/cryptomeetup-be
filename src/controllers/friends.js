@@ -15,7 +15,8 @@ let friends = async(ctx, next) => {
             userId: friend.id,
             nickname: friend.nickname,
             lng: friend.lng,
-            lat: friend.lat
+            lat: friend.lat,
+            status: friend.status
         }
         friendObjects.push(friendObject)
     }
