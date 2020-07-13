@@ -1,6 +1,7 @@
 // Local Package
 let Log = require('../util/log')
 let Store = require('../store/store')
+const getCircleAvatar = require('../util/getCirccleAvatar')
 
 const update = {
     async email(ctx, next) {
@@ -54,9 +55,11 @@ const update = {
 
         if (query.avatar !== UserProfile.avatar) {
             await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { avatar: query.avatar }}, {})
+            await getCircleAvatar(query.avatar)
             ctx.body = { message: "success" }
         }
         else {
+            await getCircleAvatar(query.avatar)
             ctx.body = { message: "No need to modify" }
         }
         await next()
