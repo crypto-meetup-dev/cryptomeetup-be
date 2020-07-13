@@ -1,6 +1,7 @@
 node_modules/
 data/
 cache/
+log/
 
 .DS_Store
 config.json

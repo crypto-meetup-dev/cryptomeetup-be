@@ -1,13 +1,14 @@
 // Local Package
 let Log = require('../util/log')
 let Store = require('../store/store')
+const getCircleAvatar = require('../util/getCirccleAvatar')
 
 const update = {
     async email(ctx, next) {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -24,7 +25,7 @@ const update = {
         UserProfile = UserProfile.pop()
         
         if (query.email !== UserProfile.email) {
-            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { email: query.email } }, {})
+            await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { email: query.email } }, {})
             ctx.body = { message: "success" }
         }
         else {
@@ -36,7 +37,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -53,10 +54,12 @@ const update = {
         UserProfile = UserProfile.pop()
 
         if (query.avatar !== UserProfile.avatar) {
-            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { avatar: query.avatar }}, {})
+            await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { avatar: query.avatar }}, {})
+            await getCircleAvatar(query.id, query.avatar)
             ctx.body = { message: "success" }
         }
         else {
+            await getCircleAvatar(query.id, query.avatar)
             ctx.body = { message: "No need to modify" }
         }
         await next()
@@ -65,7 +68,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -85,7 +88,7 @@ const update = {
             ctx.body = { message: "No need to modify" }
         }
         else {
-            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { nickname: query.nickname } }, {})
+            await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { nickname: query.nickname } }, {})
             ctx.body = { message: "success" }
         }
         await next()
@@ -94,7 +97,7 @@ const update = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        if (query.id === undefined) {
+        if (query.id === undefined || query.id === 'undefined') {
             ctx.status = 406
             ctx.body = "Invalid Request, Missing value on required field `id`"
             await next()
@@ -121,7 +124,36 @@ const update = {
             ctx.body = { message: "No need to modify" }
         }
         else {
-            Store.user.update({ key: "UserProfile", id: query.id }, { $set: { lat: query.lat } }, {})
+            await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { lat: query.lat } }, {})
+            ctx.body = { message: "success" }
+        }
+        await next()
+    },
+    async status(ctx, next) {
+        let query = ctx.request.query
+        query = JSON.parse(JSON.stringify(query))
+
+        if (query.id === undefined || query.id === 'undefined') {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `id`"
+            await next()
+            return
+        }
+        if (query.status === undefined) {
+            ctx.status = 406
+            ctx.body = "Invalid Request, Missing value on required field `status`"
+            await next()
+            return
+        }
+
+        let UserProfile = await Store.user.find({ key: "UserProfile", id: query.id })
+        UserProfile = UserProfile.pop()
+
+        if (query.status === UserProfile.status) {
+            ctx.body({ message: "No need to modify" })
+        }
+        else {
+            await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { status: query.status } }, {})
             ctx.body = { message: "success" }
         }
         await next()
