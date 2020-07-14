@@ -46,6 +46,7 @@ let getCircleAvatar = async (id, avatar) => {
                 if (err) {
                     console.log(err)
                 } else {
+                    image.resize(640, 640)
                     image.write(output)
                     Log.debug("Processing avatar... 70%")
                     fs.createReadStream(output)
