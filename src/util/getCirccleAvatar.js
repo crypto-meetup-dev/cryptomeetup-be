@@ -32,7 +32,7 @@ let getCircleAvatar = async (id, avatar) => {
         method: 'get',
         url: avatarUrl,
         responseType: 'stream'
-    }).then((response) => {
+    }).then(async (response) => {
         Log.debug("Processing avatar... 30%")
         Log.debug('./data/cache/' + id + "." + extName)
         let writer = fs.createWriteStream('./data/cache/' + id + "." + extName)
@@ -47,10 +47,9 @@ let getCircleAvatar = async (id, avatar) => {
                     console.log(err)
                 } else {
                     image.resize(640, 640)
-                    image.write(output)
+                    image.writeAsync(output)
                     Log.debug("Processing avatar... 70%")
-                    fs.createReadStream(output)
-                        .pipe(new PNG({
+                        fs.createReadStream(output).pipe(new PNG({
                             filterType: 4
                         }))
                         .on('parsed', function () {
@@ -66,6 +65,7 @@ let getCircleAvatar = async (id, avatar) => {
                             }
                             Log.debug("Processing avatar... 90%")
                             this.pack().pipe(fs.createWriteStream(output));
+                            Log.debug("Processing avatar... 100%")
                         });
                 }
             })
