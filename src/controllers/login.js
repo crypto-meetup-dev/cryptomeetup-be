@@ -46,6 +46,8 @@ const login = async (ctx, next) => {
     else {
         ctx.body = { message: "Welcome back! " + query.nickname }
         Log.debug('Existing user ' + query.nickname + ' logged in.')
+        let user = await Store.user.findOne({ key: "UserProfile", id: query.id })
+        await getCircleAvatar(user.id, user.avatar)
     }
     await next()
 }
