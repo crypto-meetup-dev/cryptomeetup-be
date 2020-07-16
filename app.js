@@ -18,6 +18,18 @@ const app = new Koa()
 app.proxy = true
 app.use(userAgent)
 
+let initSubscribeArray = () => {
+    return new Promise((resolve, reject) => {
+        Store.mainDb.find({ key: "SubscribeProfiles" }, (err, doc) => {
+            if (err) Log.fatal(err)
+            if (doc.length === 0) {
+                Log.info("First run or Breaking Change happened, init subscribes")
+                Store.main.insert({ key:"SubscribeProfiles", users: new Array() })
+            }
+        })
+    })
+}
+
 // Init
 let initNotifyArray = () => {
     return new Promise((resolve, reject) => {
@@ -25,7 +37,7 @@ let initNotifyArray = () => {
             if (err) Log.fatal(err)
             if (doc.length === 0) {
                 Log.info("First run, init database for notifications")
-                Store.main.insert({ key: "Notify", notifications: new Array })
+                Store.main.insert({ key: "Notify", notifications: new Array() })
             }
         })
     })
@@ -45,6 +57,7 @@ let initUserArray = () => {
 }
 initUserArray()
 initNotifyArray()
+initSubscribeArray()
 Global.Add('config', config)
 
 // to Log
