@@ -7,6 +7,23 @@ let Store = require('../store/store')
 let subscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
+
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+
+    let mine = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
+    if (mine.status) {
+        ctx.body = mine.users
+        await next()
+    }
+    else {
+        ctx.body = false
+        await next()
+    }
 }
 
 let subscribeAll = async (ctx, next) => {
@@ -33,6 +50,13 @@ let mineSubscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+
     let mine = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
     if (mine.status) {
         ctx.body = mine.active
@@ -47,6 +71,31 @@ let mineSubscribe = async (ctx, next) => {
 let createSubscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
+
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+    if (query.tokenId === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `tokenId`" }
+        await next()
+        return
+    }
+    if (query.symbol === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `symbol`" }
+        await next()
+        return
+    }
+    if (query.amount === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `amount`" }
+        await next()
+        return
+    }
 
     let user = await Store.user.findOne({ key: "UserProfile", id: query.id })
     let userSubscribeProfile = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
@@ -83,6 +132,13 @@ let dismissSubscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+
     let userSubscribeProfile = await Store.user.findOne({ key:  "SubscribeProfile", id: query.id })
     if (userSubscribeProfile.status) {
         let allProfiles = await Store.main.findOne({ key: "SubscribeProfiles" })
@@ -100,13 +156,48 @@ let dismissSubscribe = async (ctx, next) => {
     await next()
 }
 
+let addSubscribe = async (ctx, next) => {
+    let query = ctx.request.query
+    query = JSON.parse(JSON.stringify(query))
+
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+    if (query.addId === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `addId`" }
+        await next()
+        return
+    }
+
+    await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $addToSet: { users: query.addId } }, {})
+    ctx.body = { message: "success" }
+}
+
 let removeSubscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+    if (query.removeId === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `removeId`" }
+        await next()
+        return
+    }
+
     let userSubscribeProfile = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
     let newUsers = userSubscribeProfile.users.filter(e => e.id !== parseInt(query.removeId))
     await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $set: { users: newUsers } }, {})
+    ctx.body = { message: "success" }
 }
 
 module.exports = {
@@ -115,5 +206,6 @@ module.exports = {
     mineSubscribe,
     createSubscribe,
     dismissSubscribe,
+    addSubscribe,
     removeSubscribe
 }

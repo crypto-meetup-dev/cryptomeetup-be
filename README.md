@@ -17,6 +17,13 @@
   - [GET /invite](#get-invite)
   - [GET /invite/update](#get-inviteupdate)
   - [GET /notification/push](#get-notificationpush)
+  - [GET /subscribe](#get-subscribe)
+  - [GET /subscribe/all](#get-subscribeall)
+  - [GET /subscribe/mine](#get-subscribemine)
+  - [GET /subscribe/create](#get-subscribecreate)
+  - [GET /subscribe/dismiss](#get-subscribedismiss)
+  - [GET /subscribe/add](#get-subscribeadd)
+  - [GET /subscribe/remove](#get-subscriberemove)
   - [GET /user/login](#get-userlogin)
   - [GET /user/avatar](#get-useravatar)
   - [GET /user/position](#get-userposition)
@@ -24,6 +31,7 @@
   - [GET /user/update/avatar](#get-userupdateavatar)
   - [GET /user/update/nickname](#get-userupdatenickname)
   - [GET /user/update/position](#get-userupateposition)
+  - [GET /user/update/status](#get-userupdatestatus)
 
 
 
@@ -135,6 +143,34 @@ For local development, you don't need any other configuration, edit the environm
 | ------ | ------- | ----------------------------- |
 | id     | Integer | id of the user in Matataki.io |
 
+#### Response
+
+| Field                                    | Type  | Description                           |
+| ---------------------------------------- | ----- | ------------------------------------- |
+| Array of [Friend Object](#Friend-Object) | Array | array of the requested user's friends |
+
+#### Friend Object
+
+| Fields   | Type    | Description                     |
+| -------- | ------- | ------------------------------- |
+| userId   | Integer | user id of the friend           |
+| nickname | String  | nickname of the user            |
+| lng      | Float   | longitude of the user last seen |
+| lat      | Float   | latitude of the user last seen  |
+| status   | Boolean | online status of friend         |
+
+Example:
+
+```
+https://api.instance.com/friends?id=0
+```
+
+Example response:
+
+```
+[{"userId": 2, "nickname": "Sam", "lng": 32.2338, "lat": -64.1292, status: false}]
+```
+
 ### GET /friends/update
 
 | Fields   | Type    | Description              |
@@ -142,12 +178,48 @@ For local development, you don't need any other configuration, edit the environm
 | id       | Integer | id of the user to modify |
 | removeId | Integer | id of the user to remove |
 
+#### Response
+
+| Field   | Type   | Description                                    |
+| ------- | ------ | ---------------------------------------------- |
+| message | String | 'success' or 'No need to modify' based on user |
+
+Example:
+
+```
+https://api.instance.com/subscribe/dismiss?id=0
+```
+
+Example response:
+
+```
+{ message: 'success' }
+```
+
 ### GET /invite
 
 | Fields | Type    | Description                         |
 | ------ | ------- | ----------------------------------- |
 | id     | Integer | id of the user to send invite       |
 | email  | String  | email of the user to get the invite |
+
+#### Response
+
+| Field                                                 | Type                                        | Description                             |
+| ----------------------------------------------------- | ------------------------------------------- | --------------------------------------- |
+| Object of [Notification Object](#Notification-Object) | [Notification Object](#Notification-Object) | the invited notification object updated |
+
+Example:
+
+```
+https://api.instance.com/invite?id=12&email=root@instance.com
+```
+
+Example response:
+
+```
+{notifyGlobalId: siw92is8, notifyId: 1, userId: 12, title: John, body: "John 希望和你共享 TA 的地图信息（这并不会暴露你的地图信息），要接受吗？", proceed: false}
+```
 
 ### GET /invite/update
 
@@ -158,11 +230,217 @@ For local development, you don't need any other configuration, edit the environm
 | notifyId   | Integer | id of the notifyObject for user  |
 | inviteUser | Integer | id of the user to be invited     |
 
+#### Response
+
+| Field   | Type   | Description                                    |
+| ------- | ------ | ---------------------------------------------- |
+| message | String | 'success' or 'No need to modify' based on user |
+
+Example:
+
+```
+https://api.instance.com/invite/update?id=0&result=accept&notifyId=2&inviteUser=4
+```
+
+Example response:
+
+```
+{ message: 'success' }
+```
+
 ### GET /notification/push
 
 | Field | Type    | Description                |
 | ----- | ------- | -------------------------- |
 | id    | Integer | id of the user to get push |
+
+#### Response
+
+| Field                                               | Type  | Description                               |
+| --------------------------------------------------- | ----- | ----------------------------------------- |
+| Array of [Notification Object](#notificationobject) | Array | array of the request user's notifications |
+
+#### Notification Object
+
+| Fields         | Type    | Description                                            |
+| -------------- | ------- | ------------------------------------------------------ |
+| notifyGlobalId | Integer | Global Id of the notify object                         |
+| notifyId       | Integer | notification id of the user                            |
+| userId         | Integer | the id of user who request                             |
+| title          | String  | the title of notification, nickname here               |
+| body           | String  | the body of notification                               |
+| proceed        | Boolean | a boolean value weither this notification is proceeded |
+
+Example:
+
+```
+https://api.instance.com/notification/push?id=0
+```
+
+Example response:
+
+```
+[{notifyGlobalId: siw92is8, notifyId: 1, userId: 0, title: John, body: "John 希望和你共享 TA 的地图信息（这并不会暴露你的地图信息），要接受吗？", proceed: false}]
+```
+
+### GET /subscribe/all
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| None  | N/A  | N/A         |
+
+#### Response
+
+| Field                                                  | Type  | Description                                      |
+| ------------------------------------------------------ | ----- | ------------------------------------------------ |
+| Array of [Subscription Profile](#Subscription-Profile) | Array | a array contains all the available subscriptions |
+
+#### Subscription Profile
+
+| Fields   | Type          | Description                                 |
+| -------- | ------------- | ------------------------------------------- |
+| id       | Integer       | id of the user who created the subscription |
+| nickname | String        | nickname of the user                        |
+| token    | Integer       | the tokenId for required token              |
+| symbol   | String (CAPS) | the symbol of the token                     |
+| amount   | Integer       | the required amount token to unlock         |
+
+Example:
+
+```
+https://api.instance.com/subscribe/all
+```
+
+Example response:
+
+```
+[{"userId":"1332","nickname":"アヤカ","token":"22","symbol":"DAO","amount":"1000000"}]
+```
+
+### GET /subscribe/mine
+
+| Field | Type    | Description                                    |
+| ----- | ------- | ---------------------------------------------- |
+| id    | Integer | id of the reuqested user to query subscription |
+
+#### Response
+
+| Field                                                   | Type                                          | Description |
+| ------------------------------------------------------- | --------------------------------------------- | ----------- |
+| Object of [Subscription Profile](#Subscription-Profile) | [Subscription Profile](#Subscription-Profile) |             |
+
+Example:
+
+```
+https://api.instance.com/subscribe/mine?id=0
+```
+
+Example response:
+
+```
+{"userId":"1332","nickname":"アヤカ","token":"22","symbol":"DAO","amount":"1000000"}
+```
+
+### GET /subscribe/create
+
+| Fields  | Type          | Description                                  |
+| ------- | ------------- | -------------------------------------------- |
+| id      | Integer       | id of the user who create the subscription   |
+| tokenId | Integer       | tokenId of the required token                |
+| symbol  | String (CAPS) | token symbol of the required token           |
+| amount  | Integer       | a specified amount of token for subscription |
+
+#### Response
+
+| Field   | Type   | Description                                        |
+| ------- | ------ | -------------------------------------------------- |
+| message | String | 'create success' or 'update success' based on user |
+
+Example:
+
+```
+https://api.instance.com/subscribe/create?id=0&tokenId=22&symbol=DAO&amount=1000000
+```
+
+Example response:
+
+```
+{ message: 'create success' }
+```
+
+### GET /subscribe/dismiss
+
+| Field | Type    | Description                         |
+| ----- | ------- | ----------------------------------- |
+| id    | Integer | id of the dismiss subscription user |
+
+#### Response
+
+| Field   | Type   | Description                                    |
+| ------- | ------ | ---------------------------------------------- |
+| message | String | 'success' or 'No need to modify' based on user |
+
+Example:
+
+```
+https://api.instance.com/subscribe/dismiss?id=0
+```
+
+Example response:
+
+```
+{ message: 'success' }
+```
+
+### GET /subscribe/add
+
+| Fields | Type    | Description                               |
+| ------ | ------- | ----------------------------------------- |
+| id     | Integer | id of the requested user                  |
+| addId  | Integer | id of the user who to add to subscription |
+
+#### Response
+
+| Field   | Type   | Description                                    |
+| ------- | ------ | ---------------------------------------------- |
+| message | String | 'success' or 'No need to modify' based on user |
+
+Example:
+
+```
+https://api.instance.com/subscribe/add?id=0
+```
+
+Example response:
+
+```
+{ message: 'success' }
+```
+
+### GET /subscribe/remove
+
+| Fields   | Type    | Description                                    |
+| -------- | ------- | ---------------------------------------------- |
+| id       | Integer | id of the requested user                       |
+| removeId | Integer | id of the user who to remove from subscription |
+
+#### Response
+
+| Field   | Type   | Description                                    |
+| ------- | ------ | ---------------------------------------------- |
+| message | String | 'success' or 'No need to modify' based on user |
+
+Example:
+
+```
+https://api.instance.com/subscribe/remove?id=0
+```
+
+Example response:
+
+```
+{ message: 'success' }
+```
 
 ### GET /user/login
 
@@ -316,4 +594,29 @@ Example response:
 { "message": "success" }
 ```
 
-### 
+### GET /user/update/status
+
+| Fields | Type    | Description                                          |
+| ------ | ------- | ---------------------------------------------------- |
+| id     | Integer | id of the user to update statuss                     |
+| status | Boolean | a boolean value of weither the user is online or not |
+
+#### Response
+
+#### Response
+
+| Fields  | Type   | Description                                                  |
+| ------- | ------ | ------------------------------------------------------------ |
+| Message | String | The message saying weither the update is success or not modified |
+
+Example:
+
+```
+https://api.instance.com/user/update/position?id=1&lng=123.22&lat=32.3331
+```
+
+Example response:
+
+```
+{ "message": "success" }
+```
