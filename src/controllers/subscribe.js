@@ -7,6 +7,23 @@ let Store = require('../store/store')
 let subscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
+
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+
+    let mine = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
+    if (mine.status) {
+        ctx.body = mine.users
+        await next()
+    }
+    else {
+        ctx.body = false
+        await next()
+    }
 }
 
 let subscribeAll = async (ctx, next) => {
@@ -115,6 +132,13 @@ let dismissSubscribe = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
+    if (query.id === undefined) {
+        ctx.status = 406
+        ctx.body = { message: "Invalid Request, Missing value on required field `id`" }
+        await next()
+        return
+    }
+
     let userSubscribeProfile = await Store.user.findOne({ key:  "SubscribeProfile", id: query.id })
     if (userSubscribeProfile.status) {
         let allProfiles = await Store.main.findOne({ key: "SubscribeProfiles" })
@@ -150,6 +174,7 @@ let addSubscribe = async (ctx, next) => {
     }
 
     await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $addToSet: { users: query.addId } }, {})
+    ctx.body = { message: "success" }
 }
 
 let removeSubscribe = async (ctx, next) => {
@@ -172,6 +197,7 @@ let removeSubscribe = async (ctx, next) => {
     let userSubscribeProfile = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
     let newUsers = userSubscribeProfile.users.filter(e => e.id !== parseInt(query.removeId))
     await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $set: { users: newUsers } }, {})
+    ctx.body = { message: "success" }
 }
 
 module.exports = {
