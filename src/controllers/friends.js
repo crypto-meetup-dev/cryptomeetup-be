@@ -46,7 +46,7 @@ let friendsUpdate = async (ctx, next) => {
     }
 
     let friends = await Store.user.findOne({ key: "FriendsProfile", id: query.id })
-    friends = friends.users.filter(e => e.id !== parseInt(query.removeId))
+    friends = friends.users.filter(e => e !== query.removeId)
     await Store.user.update({ key: "FriendsProfile", id: query.id }, { $set: { users: friends } }, {})
     
     ctx.body = { message: "success" }
