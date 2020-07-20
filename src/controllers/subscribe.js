@@ -16,14 +16,8 @@ let subscribe = async (ctx, next) => {
     }
 
     let mine = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
-    if (mine.status) {
-        ctx.body = mine.users
-        await next()
-    }
-    else {
-        ctx.body = false
-        await next()
-    }
+    ctx.body = mine.users
+    await next()
 }
 
 let subscribeAll = async (ctx, next) => {
@@ -34,7 +28,7 @@ let subscribeAll = async (ctx, next) => {
     if (allProfiles.users.length > 0) {
         let profiles = new Array()
         let i = 0
-        for (i = 0;i < allProfiles.users.length; i++) {
+        for (i = 0; i < allProfiles.users.length; i++) {
             let res = await Store.user.findOne({ key: "SubscribeProfile", id: allProfiles.users[i] })
             if (res.status) profiles.push(res.active)
         }
@@ -139,12 +133,12 @@ let dismissSubscribe = async (ctx, next) => {
         return
     }
 
-    let userSubscribeProfile = await Store.user.findOne({ key:  "SubscribeProfile", id: query.id })
+    let userSubscribeProfile = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
     if (userSubscribeProfile.status) {
         let allProfiles = await Store.main.findOne({ key: "SubscribeProfiles" })
         let newUsers = allProfiles.users.filter(e => e.id !== parseInt(query.id))
         await Store.main.update({ key: "SubscribeProfiles" }, { $set: { users: newUsers } }, {})
-        
+
         await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $set: { status: false } }, {})
         await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $set: { active: {} } }, {})
 
