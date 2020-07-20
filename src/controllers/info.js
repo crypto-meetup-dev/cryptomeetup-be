@@ -1,7 +1,9 @@
-// Dependencies
-const fs = require('fs')
+// Local Packages
+const Log = require('../util/log')
+const Store = require('../store/store')
 
-let avatar = async (ctx, next) => {
+let info = async (ctx, next) => {
+
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
@@ -11,9 +13,9 @@ let avatar = async (ctx, next) => {
         return
     }
 
-    ctx.type = 'image/png'
-    ctx.body = fs.createReadStream('./data/img/' + query.id + ".png")
+    let user = await Store.user.findOne({ key: "UserProfile", id: query.id })
+    ctx.body = user
     await next()
 }
 
-module.exports = avatar
+module.exports = info
