@@ -150,7 +150,7 @@ const update = {
         UserProfile = UserProfile.pop()
 
         if (query.status === UserProfile.status) {
-            ctx.body({ message: "No need to modify" })
+            ctx.body = { message: "No need to modify" }
         }
         else {
             await Store.user.update({ key: "UserProfile", id: query.id }, { $set: { status: query.status } }, {})
