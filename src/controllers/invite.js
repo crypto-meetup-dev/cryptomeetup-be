@@ -77,7 +77,7 @@ let inviteUpdate = async (ctx, next) => {
             deny(query)
     }
 
-    ctx.body = query
+    ctx.body = { message: "success" }
 }
 
 async function accept(query) {
