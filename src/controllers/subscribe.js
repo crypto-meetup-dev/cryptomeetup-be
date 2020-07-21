@@ -169,6 +169,8 @@ let addSubscribe = async (ctx, next) => {
     }
 
     await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $addToSet: { users: query.addId } }, {})
+    let result = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
+    console.log(result)
     ctx.body = { message: "success" }
 }
 
