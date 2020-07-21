@@ -16,6 +16,7 @@ let subscribe = async (ctx, next) => {
     }
 
     let mine = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
+    console.log(mine)
     ctx.body = mine.users
     await next()
 }
