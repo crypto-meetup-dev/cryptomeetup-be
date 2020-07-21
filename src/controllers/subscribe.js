@@ -170,8 +170,10 @@ let addSubscribe = async (ctx, next) => {
 
     await Store.user.update({ key: "SubscribeProfile", id: query.id }, { $addToSet: { users: query.addId } }, {})
     let result = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
-    console.log(result)
-    ctx.body = { message: "success" }
+    if (result) ctx.body = { message: "success" }
+    else {
+        ctx.body = { message: 'user needs to relogin' }
+    }
 }
 
 let removeSubscribe = async (ctx, next) => {
