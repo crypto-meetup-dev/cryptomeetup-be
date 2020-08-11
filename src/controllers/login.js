@@ -48,6 +48,7 @@ const login = async (ctx, next) => {
         let subProfileIsExist = await Store.user.findOne({ key: "SubscribeProfile", id: query.id })
         if (!subProfileIsExist) await Store.user.insert({ key: "SubscribeProfile", id: query.id, users: [], active: {}, status: false })
         if (!subProfileIsExist) Log.warning("Breaking change after login, creating field for user " + query.nickname)
+        await Store.user.update({ key: "UserProfile", id: query.id }, { nickname: query.nickname, avatar: query.avatar }, {})
         ctx.body = { message: "Welcome back! " + query.nickname }
         Log.debug('Existing user ' + query.nickname + ' logged in.')
         let user = await Store.user.findOne({ key: "UserProfile", id: query.id })
